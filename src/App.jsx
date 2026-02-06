@@ -1,5 +1,5 @@
 import './App.css'
-import { useReducer, useRef } from 'react'
+import { useReducer, useRef, createContext } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Diary from './pages/Diary'
@@ -36,6 +36,9 @@ function reducer(state, action) {
       return state;
   }
 }
+
+const DiaryStateContext = createContext();
+const DiaryDispatchContext = createContext();
 
 
 function App() {
@@ -93,6 +96,12 @@ function App() {
       onDelete(1);
     }}>일기 삭제 테스트</button>
 
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider value={{
+        onCreate,
+        onUpdate,
+        onDelete,
+      }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/new" element={<New />} />
@@ -100,6 +109,9 @@ function App() {
         <Route path="*" element={<Notfound />} />
         <Route path="/edit/:id" element={<Edit />} />
       </Routes>
+      </DiaryDispatchContext.Provider>
+
+    </DiaryStateContext.Provider>
     </>
   )
 }
